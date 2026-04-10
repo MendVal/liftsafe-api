@@ -12,15 +12,19 @@ app.use(express.json());
 const apiRoutes = require('./src/index');
 
 app.use('/api', apiRoutes);
-
-// Ruta de prueba de base de datos
-const { promisePool } = require('./src/config/db');
 app.get('/test-db', async (req, res) => {
+  const { promisePool } = require('./src/config/db');
   try {
-    await promisePool.execute('SELECT 1');
-    res.json({ success: true, message: '✅ Conectado a BD' });
+    const [result] = await promisePool.execute('SELECT 1 as connected');
+    res.json({ success: true, message: 'Conectado a BD' });
   } catch (error) {
-    res.status(500).json({ success: false, error: error.message });
+    console.error(' Error en /test-db:', error);
+    res.status(500).json({ 
+      success: false, 
+      error: error.message,
+      code: error.code,
+      sqlMessage: error.sqlMessage
+    });
   }
 });
 
@@ -31,8 +35,8 @@ app.get('/', (req, res) => {
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
   console.log(`Servidor LiftSafe en http://localhost:${PORT}`);
-  console.log(`POST /api/ascensores`);
-  console.log(`POST /api/solicitudes`);
-  console.log(`POST /api/inspecciones`);
-  console.log(`GET /test-db para probar conexión`);
+  console.log(` POST /api/ascensores`);
+  console.log(` POST /api/solicitudes`);
+  console.log(` POST /api/inspecciones`);
+  console.log(` GET /test-db para probar conexión`);
 });
