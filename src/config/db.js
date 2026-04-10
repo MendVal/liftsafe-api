@@ -4,17 +4,15 @@ require('dotenv').config();
 
 const isRailway = !!process.env.MYSQLHOST;
 
-const host = process.env.MYSQLHOST || process.env.DB_HOST || 'localhost';
-const port = process.env.MYSQLPORT || process.env.DB_PORT || 3306;
-const user = process.env.MYSQLUSER || process.env.DB_USER || 'root';
-const password = process.env.MYSQLPASSWORD || process.env.DB_PASSWORD || '';
+// Configuración de la base de datos
+const host = process.env.MYSQLHOST || 'localhost';
+const port = process.env.MYSQLPORT || 3306;
+const user = process.env.MYSQLUSER || 'root';
+const password = process.env.MYSQLPASSWORD || '';
+// Si es Railway, usa 'railway'; si no, usa el valor de variable o 'liftsafe_db'
+const database = isRailway ? 'railway' : (process.env.MYSQLDATABASE || 'liftsafe_db');
 
-// Si está en Railway, forzar 'railway' como nombre de la BD
-const database = isRailway 
-  ? 'railway' 
-  : (process.env.MYSQLDATABASE || process.env.DB_NAME || 'liftsafe_db');
-
-console.log('🔌 Conectando a BD con:', { host, port, user, database, isRailway });
+console.log(`🔌 Conectando a BD en ${isRailway ? 'Railway' : 'local'}:`, { host, port, user, database });
 
 const pool = mysql.createPool({
   host,
