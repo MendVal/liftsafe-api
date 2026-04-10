@@ -6,87 +6,112 @@ Proyecto académico basado en Node.js, Express y MySQL.
 
 ---
 
+## 🌐 API desplegada en Railway (producción)
+
+La API está disponible en la nube en la siguiente URL:
+
+**`https://liftsafe-api-production.up.railway.app`**
+
+Puedes probar los endpoints `GET` directamente desde el navegador.  
+Para probar los `POST` necesitarás una herramienta como **Thunder Client**, **Postman** o **cURL**.
+
+### Ejemplo de `POST` con cURL (desde tu terminal):
+
+```bash
+curl -X POST https://liftsafe-api-production.up.railway.app/api/ascensores \
+  -H "Content-Type: application/json" \
+  -d '{"id_cliente":11,"codigo_interno":"CURL-01","marca":"Otis","modelo":"Gen2","numero_serie":"CURL001","tipo_ascensor":"Pasajeros","capacidad_kg":630,"capacidad_personas":8,"numero_pisos":10,"ubicacion_exacta":"Prueba","direccion_completa":"Calle 123","ciudad":"Bogotá","fecha_instalacion":"2024-01-01"}'
+```
+
 ## 🚀 Endpoints disponibles
+**General**
+GET /test-db – Prueba de conexión a la base de datos
 
-### Prueba de conexión a la base de datos
-- **GET** `/test-db`
+**Ascensores**
 
-### Ascensores
-- **POST** `/api/ascensores` – Crear ascensor
-- **GET** `/api/ascensores` – Listar todos los ascensores
-- **GET** `/api/ascensores/:id` – Obtener ascensor por ID
+POST /api/ascensores – Crear un nuevo ascensor
 
-### Solicitudes
-- **POST** `/api/solicitudes` – Crear solicitud
-- **GET** `/api/solicitudes` – Listar todas las solicitudes
-- **GET** `/api/solicitudes/:id` – Obtener solicitud por ID
+GET /api/ascensores – Listar todos los ascensores
 
-### Inspecciones
-- **POST** `/api/inspecciones` – Crear inspección
-- **GET** `/api/inspecciones` – Listar todas las inspecciones
-- **GET** `/api/inspecciones/:id` – Obtener inspección por ID
+GET /api/ascensores/:id – Obtener un ascensor por su ID
 
----
+**Solicitudes**
 
-## 📋 Requisitos previos
+POST /api/solicitudes – Crear una nueva solicitud
 
-- Node.js (v14 o superior)
-- MySQL (XAMPP, WAMP o instalación independiente)
+GET /api/solicitudes – Listar todas las solicitudes
 
----
+GET /api/solicitudes/:id – Obtener una solicitud por ID
+
+**Inspecciones**
+
+POST /api/inspecciones – Crear una nueva inspección
+
+GET /api/inspecciones – Listar todas las inspecciones
+
+GET /api/inspecciones/:id – Obtener una inspección por ID
+
+
+## 📋 Requisitos previos (para ejecución local)
+Node.js (v14 o superior)
+
+MySQL (XAMPP, WAMP o instalación independiente)
 
 ## 🔧 Instalación y ejecución local
-
 Sigue estos pasos para ejecutar la API en tu computadora:
 
-1. **Clonar o descargar el repositorio**
-   ```bash
-   git clone https://github.com/MendVal/liftsafe-api.git
-   cd liftsafe-api
+Clonar o descargar el repositorio
 
----
-## Crear la base de datos
+```bash
+git clone https://github.com/MendVal/liftsafe-api.git
+cd liftsafe-api
+```
+Crear la base de datos
 
- 1. Abre phpMyAdmin o la línea de comandos de MySQL.
+- Abre phpMyAdmin o la línea de comandos de MySQL.
 
- 2. Crea una base de datos llamada liftsafe_db (collation utf8mb4_unicode_ci).
+- Crea una base de datos llamada liftsafe_db (collation utf8mb4_unicode_ci).
 
- 3. Importa el archivo liftsafe_db.sql (incluido en el repositorio). Este script crea todas las tablas y carga datos de ejemplo.
+- Importa el archivo liftsafe_db.sql (incluido en el repositorio). Este script crea todas las tablas y carga datos de ejemplo.
 
- 4. Configurar conexión (opcional)
+**Configurar conexión (opcional)**
 
 El archivo src/config/db.js usa por defecto:
 ```bash
-js
+javascript
 host: 'localhost',
 user: 'root',
 password: '',
 database: 'liftsafe_db'
 Si tu MySQL tiene otra configuración, edita este archivo.
 ```
----
-## Instalar dependencias
+
+**Instalar dependencias**
 
 ```bash
 npm install
 Iniciar el servidor
-
+```
+```bash
 npm run dev
-Verás:
+Verás en la terminal:
+```
 
-text
- Servidor LiftSafe en http://localhost:3000
+Veras en la terminal: 
+```bash
+Servidor LiftSafe en http://localhost:3000
  POST /api/ascensores
  POST /api/solicitudes
  POST /api/inspecciones
 ```
----
-## Ejemplos de peticiones
+## Ejemplos de peticiones (local o en la nube)
 Probar conexión
-http
-GET http://localhost:3000/test-db
 
-Crear ascensor
+
+**GET** http://localhost:3000/test-db
+(Para la nube, usa https://liftsafe-api-production.up.railway.app/test-db)
+
+**Crear ascensor (POST)**
 http
 POST http://localhost:3000/api/ascensores
 Content-Type: application/json
@@ -110,10 +135,11 @@ Content-Type: application/json
 }
 ```
 
-Crear solicitud
-http
-POST http://localhost:3000/api/solicitudes
+**Crear solicitud (POST)**
+
+**POST** http://localhost:3000/api/solicitudes
 Content-Type: application/json
+
 ```bash
 {
     "id_cliente": 11,
@@ -125,11 +151,11 @@ Content-Type: application/json
     "observaciones": "Revisión anual"
 }
 ```
-
-Crear inspección
+**Crear inspección (POST)**
 http
 POST http://localhost:3000/api/inspecciones
 Content-Type: application/json
+
 ```bash
 {
     "id_programacion": 24,
@@ -139,21 +165,21 @@ Content-Type: application/json
     "fecha_inicio": "2026-04-09 08:00:00"
 }
 ```
-Listar ascensores
-http
+**Listar ascensores (GET)**
+
 GET http://localhost:3000/api/ascensores
 
----
-## Estructura del proyecto
+
+## 📁 Estructura del proyecto
 ```bash
-text
 ├── index.js
 ├── package.json
 ├── liftsafe_db.sql
 ├── README.md
 └── src/
     ├── config/
-    │   └── db.js
+    │   ├── db.js
+    │   └── env.js               
     ├── controllers/
     │   ├── ascensor.controller.js
     │   ├── solicitud.controller.js
@@ -164,15 +190,15 @@ text
     │   ├── inspeccion.routes.js
     │   └── index.js
     └── index.js (montaje de rutas)
-
 ```
-## Tecnologías utilizadas
-    Node.js
+## 🛠️ Tecnologías utilizadas
 
-    Express
+- Node.js
 
-    MySQL2
+- Express
 
-    CORS
+- MySQL2
 
-    Nodemon (desarrollo)
+- CORS
+
+- Nodemon (desarrollo)
